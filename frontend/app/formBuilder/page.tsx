@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
 import { useState } from "react";
 
 /* TODO:
@@ -26,7 +27,7 @@ import { useState } from "react";
 
 type Field = {
   id: string;
-  type: "text" | "checkbox" | "select";
+  type: "text" | "checkbox" | "select" | "rating";
   label: string;
 };
 
@@ -73,6 +74,17 @@ export default function CardDemo() {
             </Select>
           </div>
         );
+      case "rating":
+        return (
+          <div key={field.id} className="my-2">
+            <label className="block mb-1">{field.label}</label>
+            <Rating defaultValue={0}>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <RatingButton key={index} />
+              ))}
+            </Rating>
+          </div>
+        );
       default:
         return null;
     }
@@ -110,7 +122,11 @@ export default function CardDemo() {
           >
             Multiselect
           </Button>
-          <Button variant="outline" className="w-full my-1">
+          <Button
+            variant="outline"
+            className="w-full my-1"
+            onClick={() => addField("rating")}
+          >
             Rating Fields
           </Button>
         </CardContent>
