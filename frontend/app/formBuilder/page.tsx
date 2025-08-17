@@ -22,54 +22,65 @@ import { useState } from "react"
 
 
 /* TODO:
-- add multiselect
-- add dynamic labels
-- add reordering
-- separate component keys for each component
-*/
+ - add reordering 
+ - separate component keys for each component */
 
+type Field = {
+  id: string
+  type: "text" | "checkbox" | "select"
+  label: string
+}
 
 export default function CardDemo() {
-  const [fields, setFields] = useState<JSX.Element>([])
+  const [fields, setFields] = useState<Field[]>([])
 
-  function addTextField() {
+  function addField(type: Field["type"]) {
     setFields(prev => [
       ...prev,
-      <Input
-        key={prev.length}
-        placeholder={`Text field ${prev.length + 1}`}
-        className="my-2"
-      />
+      {
+        id: `${type}-${prev.length + 1}`, // unique id
+        type,
+        label: `${capitalize(type)} ${prev.length + 1}`,
+      },
     ])
   }
 
-  function addCheckbox() {
-    setFields(prev => [
-      ...prev,
-      <div key={prev.length} className="flex items-center space-x-2 my-2">
-        <input type="checkbox" id={`checkbox-${prev.length}`} />
-        <label htmlFor={`checkbox-${prev.length}`}>Checkbox {prev.length + 1}</label>
-      </div>
-    ])
-  }
-
-  function addSelect() {
-    setFields(prev => [
-      ...prev,
-      <div key={prev.length} className="my-2">
-        <label className="block mb-1">Select {prev.length + 1}</label>
-        <Select>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Choose an option" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="option1">Option 1</SelectItem>
-            <SelectItem value="option2">Option 2</SelectItem>
-            <SelectItem value="option3">Option 3</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-    ])
+  function renderField(field: Field) {
+    switch (field.type) {
+      case "text":
+        return (
+          <Input
+            key={field.id}
+            placeholder={field.label}
+            className="my-2"
+          />
+        )
+      case "checkbox":
+        return (
+          <div key={field.id} className="flex items-center space-x-2 my-2">
+            <input type="checkbox" id={field.id} />
+            <label htmlFor={field.id}>{field.label}</label>
+          </div>
+        )
+      case "select":
+        return (
+          <div key={field.id} className="my-2">
+            <label className="block mb-1">{field.label}</label>
+            <Select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Choose an option" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="option1">Option 1</SelectItem>
+                <SelectItem value="option2">Option 2</SelectItem>
+                <SelectItem value="option3">Option 3</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )
+      default:
+        return null
+    }
   }
 
   return (
@@ -86,21 +97,21 @@ export default function CardDemo() {
           <Button 
             variant="outline" 
             className="w-full my-1" 
-            onClick={addTextField}
+            onClick={() => addField("text")}
           >
             Text based input fields
           </Button>
           <Button 
             variant="outline" 
             className="w-full my-1" 
-            onClick={addCheckbox}
+            onClick={() => addField("checkbox")}
           >
             Checkboxes
           </Button>
           <Button 
             variant="outline" 
             className="w-full my-1" 
-            onClick={addSelect}
+            onClick={() => addField("select")}
           >
             Multiselect
           </Button>
@@ -118,10 +129,12 @@ export default function CardDemo() {
             These are the elements in your current form
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          {fields}
-        </CardContent>
+        <CardContent>{fields.map(renderField)}</CardContent>
       </Card>
     </div>
   )
+}
+
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
