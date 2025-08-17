@@ -1,67 +1,62 @@
-'use client'
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-import { useState } from "react"
-
+import { useState } from "react";
 
 /* TODO:
  - add reordering 
  - separate component keys for each component */
 
 type Field = {
-  id: string
-  type: "text" | "checkbox" | "select"
-  label: string
-}
+  id: string;
+  type: "text" | "checkbox" | "select";
+  label: string;
+};
 
 export default function CardDemo() {
-  const [fields, setFields] = useState<Field[]>([])
+  const [fields, setFields] = useState<Field[]>([]);
 
   function addField(type: Field["type"]) {
-    setFields(prev => [
+    setFields((prev) => [
       ...prev,
       {
         id: `${type}-${prev.length + 1}`, // unique id
         type,
         label: `${capitalize(type)} ${prev.length + 1}`,
       },
-    ])
+    ]);
   }
 
   function renderField(field: Field) {
     switch (field.type) {
       case "text":
         return (
-          <Input
-            key={field.id}
-            placeholder={field.label}
-            className="my-2"
-          />
-        )
+          <Input key={field.id} placeholder={field.label} className="my-2" />
+        );
       case "checkbox":
         return (
           <div key={field.id} className="flex items-center space-x-2 my-2">
             <input type="checkbox" id={field.id} />
             <label htmlFor={field.id}>{field.label}</label>
           </div>
-        )
+        );
       case "select":
         return (
           <div key={field.id} className="my-2">
@@ -77,9 +72,9 @@ export default function CardDemo() {
               </SelectContent>
             </Select>
           </div>
-        )
+        );
       default:
-        return null
+        return null;
     }
   }
 
@@ -94,23 +89,23 @@ export default function CardDemo() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button 
-            variant="outline" 
-            className="w-full my-1" 
+          <Button
+            variant="outline"
+            className="w-full my-1"
             onClick={() => addField("text")}
           >
             Text based input fields
           </Button>
-          <Button 
-            variant="outline" 
-            className="w-full my-1" 
+          <Button
+            variant="outline"
+            className="w-full my-1"
             onClick={() => addField("checkbox")}
           >
             Checkboxes
           </Button>
-          <Button 
-            variant="outline" 
-            className="w-full my-1" 
+          <Button
+            variant="outline"
+            className="w-full my-1"
             onClick={() => addField("select")}
           >
             Multiselect
@@ -132,9 +127,9 @@ export default function CardDemo() {
         <CardContent>{fields.map(renderField)}</CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1)
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
