@@ -24,10 +24,6 @@ import { Label } from "@/components/ui/label";
 
 import { useState } from "react";
 
-/* TODO:
- - add reordering 
- - separate component keys for each component */
-
 type Field = {
   id: string;
   type: "text" | "checkbox" | "select" | "rating";
@@ -109,6 +105,10 @@ export default function CardDemo() {
     }
   }
 
+  function handleSubmit() {
+    console.log("Form submitted with fields:", fields);
+  }
+
   return (
     <div className="flex items-center justify-center h-screen">
       {/* Left card - element library */}
@@ -152,14 +152,19 @@ export default function CardDemo() {
       </Card>
 
       {/* Right card - generated form */}
-      <Card className="w-full max-w-sm flex">
+      <Card className="w-full max-w-sm flex flex-col">
         <CardHeader>
           <CardTitle>Your Form</CardTitle>
           <CardDescription>
             These are the elements in your current form
           </CardDescription>
         </CardHeader>
-        <CardContent>{fields.map(renderField)}</CardContent>
+        <CardContent className="flex flex-col">
+          {fields.map(renderField)}
+          <Button type="submit" className="mt-2" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </CardContent>
       </Card>
     </div>
   );
