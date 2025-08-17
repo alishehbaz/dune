@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/select";
 
 import { Rating, RatingButton } from "@/components/ui/shadcn-io/rating";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+
 import { useState } from "react";
 
 /* TODO:
@@ -53,10 +56,26 @@ export default function CardDemo() {
         );
       case "checkbox":
         return (
-          <div key={field.id} className="flex items-center space-x-2 my-2">
-            <input type="checkbox" id={field.id} />
-            <label htmlFor={field.id}>{field.label}</label>
-          </div>
+          <Label
+            key={field.id}
+            htmlFor={field.id}
+            className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3
+                       has-[[aria-checked=true]]:border-blue-600 has-[[aria-checked=true]]:bg-blue-50
+                       dark:has-[[aria-checked=true]]:border-blue-900 dark:has-[[aria-checked=true]]:bg-blue-950"
+          >
+            <Checkbox
+              id={field.id}
+              className="data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600
+                         data-[state=checked]:text-white dark:data-[state=checked]:border-blue-700
+                         dark:data-[state=checked]:bg-blue-700"
+            />
+            <div className="grid gap-1.5 font-normal">
+              <p className="text-sm leading-none font-medium">{field.label}</p>
+              <p className="text-muted-foreground text-sm">
+                Additional description can go here.
+              </p>
+            </div>
+          </Label>
         );
       case "select":
         return (
